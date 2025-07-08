@@ -17,7 +17,7 @@
 
 ## 📄 Usage
 
-1. **Create input files:**
+1. **input files:**
 
 - `urls.txt` — Example:
 
@@ -53,8 +53,7 @@ start.bat
 
 All valid login results will be saved in:
 
-* `valid-logins.txt`
-* `all-good.txt`
+* `valid-logins.txt` and `all-good.txt`
 
 ---
 
