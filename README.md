@@ -42,5 +42,3 @@ All valid login results will be saved in:
 ---
 
 📢 **Telegram Channel:** [t.me/secabuser](https://t.me/secabuser)
-
-```
