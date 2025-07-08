@@ -1,3 +1,20 @@
+# X-UI Panel Cracker
+
+
+![Screenshot of Tool](tool_screenshot.png)
+
+
+---
+
+
+## Features
+
+- Fast
+- Log Full
+- Save Goods
+
+---
+
 ## 📄 Usage
 
 1. **Create input files:**
