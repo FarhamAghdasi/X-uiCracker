@@ -57,4 +57,9 @@ All valid login results will be saved in:
 
 ---
 
+## Note
+
+1. **Checker panel on IPs**
+* `python check-ips.py`
+
 📢 **Telegram Channel:** [t.me/secabuser](https://t.me/secabuser)
