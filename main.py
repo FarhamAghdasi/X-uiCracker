@@ -36,7 +36,13 @@ class C:
     def l_u(self):
         try:
             with open(self.u, "r") as f:
-                self.urls = [i.strip().rstrip("/") for i in f if i.strip()]
+                for line in f:
+                    clean = line.strip().rstrip("/")
+                    if not clean:
+                        continue
+                    if not clean.startswith("http://") and not clean.startswith("https://"):
+                        clean = "http://" + clean
+                    self.urls.append(clean)
         except FileNotFoundError:
             print(f"{R}URL file not found!{RE}")
             exit(1)
