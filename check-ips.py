@@ -3,20 +3,34 @@ import threading
 import concurrent.futures
 import random
 from os import system, name
+from pystyle import Colors, Colorate, Center
+
+
+
+b = '''
+ ▄▀ ▗▖  ▗▖▗▖ ▗▖▗▄▄▄▖    ▗▖  ▗▖ ▗▄▖ ▗▖   ▗▄▄▄▖▗▄▄▄   ▗▄▖▗▄▄▄▖▗▄▖ ▗▄▄▖ 
+ █   ▝▚▞▘ ▐▌ ▐▌  █      ▐▌  ▐▌▐▌ ▐▌▐▌     █  ▐▌  █ ▐▌ ▐▌ █ ▐▌ ▐▌▐▌ ▐▌
+▄▀    ▐▌  ▐▌ ▐▌  █      ▐▌  ▐▌▐▛▀▜▌▐▌     █  ▐▌  █ ▐▛▀▜▌ █ ▐▌ ▐▌▐▛▀▚▖
+    ▗▞▘▝▚▖▝▚▄▞▘▗▄█▄▖     ▝▚▞▘ ▐▌ ▐▌▐▙▄▄▖▗▄█▄▖▐▙▄▄▀ ▐▌ ▐▌ █ ▝▚▄▞▘▐▌ ▐▌    
+
+                          t.me/secabuser
+'''
 
 class Checker:
-    def __init__(self, ip_file, port, workers, timeout):
+    def __init__(self, ip_file, workers, timeout):
         self.ip_file = ip_file
-        self.port = port
         self.workers = workers
         self.timeout = timeout
         self.lock = threading.Lock()
-        self.ips = []
+        self.targets = []
 
     def load_ips(self):
         try:
             with open(self.ip_file, "r") as f:
-                self.ips = [line.strip() for line in f if line.strip()]
+                for line in f:
+                    clean = line.strip()
+                    if clean and ':' in clean:
+                        self.targets.append(clean)
         except FileNotFoundError:
             print("IP file not found!")
             exit(1)
@@ -31,38 +45,38 @@ class Checker:
         ]
         return random.choice(agents)
 
-    def check_ip(self, ip):
+    def check_ip(self, target):
         for proto in ["http://", "https://"]:
-            url = f"{proto}{ip}:{self.port}"
+            url = f"{proto}{target}/xui"
             headers = {"User-Agent": self.user_agent()}
             try:
                 r = requests.get(url, headers=headers, timeout=self.timeout)
-                if r.status_code != 503:
+                if r.status_code not in [400, 404, 407, 503]:
                     with self.lock:
                         with open("good-sites.txt", "a") as f:
-                            f.write(url + "\n")
-                    print(f"[Good] {url}")
+                            f.write(target + "\n")
+                    print(f"[Good] {target} ({r.status_code})")
                     return
             except requests.RequestException:
                 continue
-        print(f"[Not Good] {ip}")
+        print(f"[Not Good] {target}")
 
     def run(self):
         self.load_ips()
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.workers) as executor:
-            executor.map(self.check_ip, self.ips)
+            executor.map(self.check_ip, self.targets)
         print("\nDone!")
 
 if __name__ == "__main__":
     system("cls" if name == "nt" else "clear")
+    print(Colorate.Diagonal(Colors.red_to_blue, Center.XCenter(b)))
     ip_file = input("IP list file > ").strip()
-    port = input("Port > ").strip()
     try:
         workers = int(input("Max workers > ").strip())
         timeout = float(input("Timeout > ").strip())
     except:
-        print("Invalid input")
+        print("Invalid input!")
         exit(1)
 
-    checker = Checker(ip_file, port, workers, timeout)
+    checker = Checker(ip_file, workers, timeout)
     checker.run()
