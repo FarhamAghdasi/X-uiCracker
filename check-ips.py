@@ -5,8 +5,6 @@ import random
 from os import system, name
 from pystyle import Colors, Colorate, Center
 
-
-
 b = '''
  ▄▀ ▗▖  ▗▖▗▖ ▗▖▗▄▄▄▖    ▗▖  ▗▖ ▗▄▖ ▗▖   ▗▄▄▄▖▗▄▄▄   ▗▄▖▗▄▄▄▖▗▄▖ ▗▄▄▖ 
  █   ▝▚▞▘ ▐▌ ▐▌  █      ▐▌  ▐▌▐▌ ▐▌▐▌     █  ▐▌  █ ▐▌ ▐▌ █ ▐▌ ▐▌▐▌ ▐▌
@@ -63,18 +61,24 @@ class Checker:
 
     def run(self):
         self.load_ips()
+        if not self.targets:
+            print("No valid IPs loaded.")
+            return
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.workers) as executor:
             executor.map(self.check_ip, self.targets)
         print("\nDone!")
 
 if __name__ == "__main__":
-    system("cls" if name == "nt" else "clear")
+    try:
+        system("cls" if name == "nt" else "clear")
+    except:
+        pass
     print(Colorate.Diagonal(Colors.red_to_blue, Center.XCenter(b)))
     ip_file = input("IP list file > ").strip()
     try:
         workers = int(input("Max workers > ").strip())
         timeout = float(input("Timeout > ").strip())
-    except:
+    except ValueError:
         print("Invalid input!")
         exit(1)
 
