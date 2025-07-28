@@ -1,0 +1,5 @@
+aiohttp>=3.8.0
+tqdm>=4.65.0
+requests>=2.31.0
+colorama>=0.4.6
+pystyle>=1.1.0
